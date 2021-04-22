@@ -1,6 +1,6 @@
 import axios from "axios";
 import { NOCOCID_API } from "../constant/api_link_constant";
-import authHeader from "./authService";
+import authHeader from "../auth_service/authService";
 
 const NOCOCID_API_ACCOUNT = NOCOCID_API + "Auth";
 
