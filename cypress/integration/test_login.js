@@ -1,24 +1,49 @@
-// cy.visit("/login", {
-//   auth: {
-//     username: "ThangNLD",
-//     password: "zaq@123",
-//   },
-// });
+// describe("Test login 1", () => {
+//   beforeEach(() => {
+//     cy.visit("http://localhost:3000");
+//   });
 
-//http://toan0701.ddns.net:9080/Nococid/api/Auth/login
+//   it("logs in programmatically without using the UI", function () {
+//     const username = "ThangNLD";
+//     const password = "zaq123";
+//     var jwt = "DRACK";
 
-// describe("My First Test", () => {
-//   it("Thang Test", () => {
-//     cy.visit("http://localhost:3000", {
+//     cy.request({
+//       method: "POST",
+//       url: "http://toan0701.ddns.net:9080/Nococid/api/Auth/login",
+//       failOnStatusCode: false,
 //       auth: {
-//         username: "ThangNLD",
-//         password: "zaq@123",
+//         username,
+//         password,
 //       },
+//     }).then((response) => {
+//       window.localStorage.setItem("user", username);
+//       window.localStorage.setItem("jwt", response.body.jwt);
+//       // localStorage.setItem(jwt, response.body.jwt);
+
+//       cy.visit("http://localhost:3000/home");
+//       cy.wait(1000);
+//       cy.window().then((window) =>
+//         console.log(window.localStorage.getItem("user"))
+//       );
+//       cy.window().then(() => console.log(localStorage.getItem(jwt)));
+//       const logout = "Bearer " + response.body.jwt;
+
+//       cy.wait(1000);
+//       cy.request({
+//         method: "POST",
+//         url: "http://toan0701.ddns.net:9080/Nococid/api/Auth/logout",
+//         headers: {
+//           Authorization: logout,
+//         },
+//       });
+//       cy.clearLocalStorage();
+//       cy.visit("http://localhost:3000");
 //     });
 //   });
 // });
 
-describe("Test login 1", () => {
+describe("Test login 2", () => {
   beforeEach(() => {
     // reset and seed the database prior to every test
     // cy.exec("npm run db:reset && npm run db:seed");
@@ -36,70 +61,35 @@ describe("Test login 1", () => {
     const username = "ThangNLD";
     const password = "zaq@123";
     var jwt = "DRACK";
-    var token = "";
-
+    // cy.get("Form");
+    // cy.get("Form").submit();
     // programmatically log us in without needing the UI
     cy.request("POST", "http://toan0701.ddns.net:9080/Nococid/api/Auth/login", {
       username,
       password,
     }).then((response) => {
       window.localStorage.setItem("user", username);
-      //   expect(response.body).to.have.property("jwt");
       window.localStorage.setItem("jwt", response.body.jwt);
-      localStorage.setItem(jwt, response.body.jwt);
-      token = response.body.jwt;
+      // localStorage.setItem(jwt, response.body.jwt);
+
+      cy.visit("http://localhost:3000/home");
+      cy.wait(1000);
+      cy.window().then((window) =>
+        console.log(window.localStorage.getItem("user"))
+      );
+      cy.window().then(() => console.log(localStorage.getItem(jwt)));
+      const logout = "Bearer " + response.body.jwt;
+
+      cy.wait(1000);
+      cy.request({
+        method: "POST",
+        url: "http://toan0701.ddns.net:9080/Nococid/api/Auth/logout",
+        headers: {
+          Authorization: logout,
+        },
+      });
+      cy.clearLocalStorage();
+      cy.visit("http://localhost:3000");
     });
-
-    // now that we're logged in, we can visit
-    // any kind of restricted route!
-    cy.visit("http://localhost:3000/home");
-    cy.wait(1000);
-    cy.window().then((window) =>
-      console.log(window.localStorage.getItem("user"))
-    );
-    cy.window().then((window) => console.log(window.localStorage.getItem(jwt)));
-    cy.window().then((window) =>
-      console.log(window.localStorage.getItem("jwt"))
-    );
-    const logout = "Bearer " + window.localStorage.getItem("jwt");
-
-    cy.wait(1000);
-    cy.request({
-      method: "POST",
-      url: "http://toan0701.ddns.net:9080/Nococid/api/Auth/logout",
-      headers: {
-        Authorization: logout,
-      },
-    });
-
-    // our auth cookie should be present
-    //   cy.getCookie('your-session-cookie').should('exist')
-
-    // UI should reflect this user being logged in
-    //cy.get("h1").should("contain", "ThangNLD");
   });
 });
-
-// describe("Test login 2", () => {
-//   beforeEach(() => {
-//     cy.visit("http://localhost:3000");
-//   });
-
-//   it("logs in programmatically without using the UI", function () {
-//     const username = "ThangNLD";
-//     const password = "123";
-
-//     cy.request("POST", "http://toan0701.ddns.net:9080/Nococid/api/Auth/login", {
-//       username,
-//       password,
-//     }).then((resp) => {
-//       window.localStorage.setItem("user", username);
-//     });
-
-//     cy.visit("http://localhost:3000/home");
-//     cy.wait(1000);
-//     cy.window().then((window) =>
-//       console.log(window.localStorage.getItem("user"))
-//     );
-//   });
-// });
